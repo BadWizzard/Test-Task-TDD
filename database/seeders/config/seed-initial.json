@@ -1,0 +1,6 @@
+{
+    "seeders": [
+        "cars",
+        "rentals"
+    ]
+}
