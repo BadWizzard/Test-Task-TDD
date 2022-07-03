@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Rental;
-use App\Services\CheckoutServiceLevel1;
+use App\Services\CheckoutServiceLevel2;
 use Tests\TestCase;
 
 class BookCarLevel2Test extends TestCase
@@ -12,7 +12,7 @@ class BookCarLevel2Test extends TestCase
      * Test 1 Level 2.
      *
      * car: { "id": 1, "price_per_day": 2000, "price_per_km": 10 }
-     * rental: { "id": 1, "car_id": 1, "start_date": "2017-12-8", "end_date": "2017-12-10", "distance": 100 }
+     * rental: { "id": 1, "car_id": 1, "start_date": "2015-12-8", "end_date": "2015-12-8", "distance": 100 }
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class BookCarLevel2Test extends TestCase
     {
         $rental = Rental::query()
             ->with('car')
-            ->where(Rental::MAP_ID, 1)
+            ->where(Rental::MAP_ID, 4)
             ->first();
 
         if(!$rental) {
@@ -28,8 +28,8 @@ class BookCarLevel2Test extends TestCase
             return;
         }
 
-        $checkoutCar = new CheckoutServiceLevel1($rental);
+        $checkoutCar = new CheckoutServiceLevel2($rental);
         $checkoutCar->checkout();
-        $this->assertEquals(7000, $checkoutCar->total);
+        $this->assertEquals(3000, $checkoutCar->total);
     }
 }
