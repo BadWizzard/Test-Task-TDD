@@ -21,14 +21,31 @@ class CheckoutServiceLevel2 extends CheckoutServiceAbstract
     }
 
     /**
+     *
      * @return int
      */
     public function getPriceByDuration(): int
     {
         $duration = $this->getDuration($this->rental->start_date, $this->rental->end_date);
-        $pricePerDay = $this->getPricePerDayAfterDiscount($duration, $this->rental->car->price_per_day);
+        $discountAmount = $this->getDiscountAmount($this->rental->car->price_per_day, $duration);
 
-        return $pricePerDay * $duration;
+        return $this->rental->car->price_per_day * $duration - $discountAmount;
+    }
+
+    /**
+     * @param int $pricePerDay
+     * @param int $duration
+     * @return int
+     */
+    private function getDiscountAmount(int $pricePerDay, int $duration): int
+    {
+        $discountAmount = 0;
+        for ($i = 1; $i <= $duration; $i++) {
+            $discountPercent = $this->getDiscountPercent($i);
+            $discountAmount += $pricePerDay * ($discountPercent / 100);
+        }
+
+        return $discountAmount;
     }
 
     /**
@@ -36,22 +53,20 @@ class CheckoutServiceLevel2 extends CheckoutServiceAbstract
      * price per day decreases by 30% after 4 days
      * price per day decreases by 50% after 10 days
      *
-     * @param int $duration
-     * @param int $pricePerDay
+     * @param int $days
      * @return int
      */
-    public function getPricePerDayAfterDiscount(int $duration, int $pricePerDay): int
+    private function getDiscountPercent(int $days): int
     {
         $discountPercent = 0;
-
-        if ($duration > 10) {
+        if ($days > 10) {
             $discountPercent = 50;
-        } elseif ($duration > 4) {
+        } elseif ($days > 4) {
             $discountPercent = 30;
-        } elseif ($duration > 1) {
+        } elseif ($days > 1) {
             $discountPercent = 10;
         }
 
-        return floor($pricePerDay * ($discountPercent / 100));
+        return $discountPercent;
     }
 }

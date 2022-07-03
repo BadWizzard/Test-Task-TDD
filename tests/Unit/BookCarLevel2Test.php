@@ -12,7 +12,7 @@ class BookCarLevel2Test extends TestCase
      * Test 1 Level 2.
      *
      * car: { "id": 1, "price_per_day": 2000, "price_per_km": 10 }
-     * rental: { "id": 1, "car_id": 1, "start_date": "2015-12-8", "end_date": "2015-12-8", "distance": 100 }
+     * rental: { "id": 4, "car_id": 1, "start_date": "2015-12-8", "end_date": "2015-12-8", "distance": 100 }
      *
      * @return void
      */
@@ -23,7 +23,7 @@ class BookCarLevel2Test extends TestCase
             ->where(Rental::MAP_ID, 4)
             ->first();
 
-        if(!$rental) {
+        if (!$rental) {
             $this->assertTrue(false);
             return;
         }
@@ -31,5 +31,55 @@ class BookCarLevel2Test extends TestCase
         $checkoutCar = new CheckoutServiceLevel2($rental);
         $checkoutCar->checkout();
         $this->assertEquals(3000, $checkoutCar->total);
+    }
+
+    /**
+     * Test 2 Level 2.
+     *
+     * car: { "id": 1, "price_per_day": 2000, "price_per_km": 10 }
+     * rental: { "id": 5, "car_id": 1, "start_date": "2015-03-31", "end_date": "2015-04-01", "distance": 300 }
+     *
+     * @return void
+     */
+    public function test2()
+    {
+        $rental = Rental::query()
+            ->with('car')
+            ->where(Rental::MAP_ID, 5)
+            ->first();
+
+        if (!$rental) {
+            $this->assertTrue(false);
+            return;
+        }
+
+        $checkoutCar = new CheckoutServiceLevel2($rental);
+        $checkoutCar->checkout();
+        $this->assertEquals(6800, $checkoutCar->total);
+    }
+
+    /**
+     * Test 3 Level 2.
+     *
+     * car: { "id": 1, "price_per_day": 2000, "price_per_km": 10 }
+     * rental: { "id": 6, "car_id": 1, "start_date": "2015-07-3", "end_date": "2015-07-14", "distance": 1000 }
+     *
+     * @return void
+     */
+    public function test3()
+    {
+        $rental = Rental::query()
+            ->with('car')
+            ->where(Rental::MAP_ID, 6)
+            ->first();
+
+        if (!$rental) {
+            $this->assertTrue(false);
+            return;
+        }
+
+        $checkoutCar = new CheckoutServiceLevel2($rental);
+        $checkoutCar->checkout();
+        $this->assertEquals(27800, $checkoutCar->total);
     }
 }
