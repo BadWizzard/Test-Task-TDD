@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class CheckoutServiceLevel1 extends CheckoutServiceAbstract
+class CheckoutServiceLevel2 extends CheckoutServiceAbstract
 {
     public function checkout(): int
     {
