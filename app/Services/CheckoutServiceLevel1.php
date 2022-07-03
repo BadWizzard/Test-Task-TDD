@@ -25,7 +25,6 @@ class CheckoutServiceLevel1 extends CheckoutServiceAbstract
      */
     public function getPriceByDuration(): int
     {
-        $duration = $this->getDuration($this->rental->start_date, $this->rental->end_date);
-        return $this->rental->car->price_per_day * $duration;
+        return $this->rental->car->price_per_day * $this->duration;
     }
 }

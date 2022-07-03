@@ -4,10 +4,15 @@ namespace App\Services;
 
 class CheckoutServiceLevel3 extends CheckoutServiceAbstract
 {
+    public Commission $commission;
+
     public function checkout(): int
     {
         $this->total = $this->getPriceByDuration();
         $this->total += $this->getPriceByDistance();
+
+        $this->commission = new Commission($this->total, $this->duration);
+        $this->commission->calculate();
 
         return $this->total;
     }
@@ -26,10 +31,9 @@ class CheckoutServiceLevel3 extends CheckoutServiceAbstract
      */
     public function getPriceByDuration(): int
     {
-        $duration = $this->getDuration($this->rental->start_date, $this->rental->end_date);
-        $discountAmount = $this->getDiscountAmount($this->rental->car->price_per_day, $duration);
+        $discountAmount = $this->getDiscountAmount($this->rental->car->price_per_day, $this->duration);
 
-        return $this->rental->car->price_per_day * $duration - $discountAmount;
+        return $this->rental->car->price_per_day * $this->duration - $discountAmount;
     }
 
     /**
