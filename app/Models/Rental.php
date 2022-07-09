@@ -17,6 +17,7 @@ class Rental extends Model
     public const MAP_START_DATE = 'start_date';
     public const MAP_END_DATE = 'end_date';
     public const MAP_DISTANCE = 'distance';
+    public const MAP_DEDUCTIBLE_REDUCTION = 'deductible_reduction';
 
     /**
      * @return HasOne
